@@ -1,5 +1,9 @@
 package com.yikai.security.config;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.yikai.security.entity.Users;
+import com.yikai.security.mapper.UsersMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -22,10 +26,20 @@ import java.util.List;
 @Service("userDetailsService")
 public class MyUserDetailsService implements UserDetailsService {
 
+    @Autowired
+    private UsersMapper usersMapper;
+
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
+        QueryWrapper<Users> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",s);
+        Users users = usersMapper.selectOne(wrapper);
+        if (users == null){
+            throw new UsernameNotFoundException("用户不存在");
+        }
+
         List<GrantedAuthority> auths = AuthorityUtils.createAuthorityList("admin");
-        return new User("jack",new BCryptPasswordEncoder().encode("jack"),auths);
+        return new User(users.getUsername(),new BCryptPasswordEncoder().encode(users.getPassword()),auths);
     }
 }
