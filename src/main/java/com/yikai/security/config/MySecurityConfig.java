@@ -41,9 +41,12 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 //表单url
                 .loginProcessingUrl("/user/login")
                 //登录成功后的
-                .defaultSuccessUrl("/success.html").permitAll()
+                .defaultSuccessUrl("/test/index").permitAll()
                 //无需认证页面
                 .and().authorizeRequests().antMatchers("/","/test/hello","/user/login").permitAll()
+                .antMatchers("/test/index").hasAnyAuthority("common,admin")
+                //hasRole方法自动添加了"ROLE_"前缀
+//                .antMatchers("/test/index").hasRole("saler")
                 .anyRequest().authenticated()
                 .and().csrf().disable();
     }

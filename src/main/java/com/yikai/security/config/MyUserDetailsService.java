@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ import java.util.List;
  * @Number K1171305
  * @Date 2020/11/25 17:55
  */
-@Service("userDetailsService")
+@Service("userDetailsService")      //因为那边需要注入,所以就指定了name
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -39,7 +38,13 @@ public class MyUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
 
-        List<GrantedAuthority> auths = AuthorityUtils.createAuthorityList("admin");
-        return new User(users.getUsername(),new BCryptPasswordEncoder().encode(users.getPassword()),auths);
+        //权限
+        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList("admin,common");
+        //可加角色
+        //源码中的角色以"ROLE_"开头,所以这里必须要以"ROLE_"开头
+//        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_saler");
+
+
+        return new User(users.getUsername(),new BCryptPasswordEncoder().encode(users.getPassword()), auths);
     }
 }
