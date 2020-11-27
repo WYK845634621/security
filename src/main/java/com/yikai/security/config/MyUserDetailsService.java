@@ -39,7 +39,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         //权限
-        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList("admin,common");
+        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_saler");
         //可加角色
         //源码中的角色以"ROLE_"开头,所以这里必须要以"ROLE_"开头
 //        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_saler");

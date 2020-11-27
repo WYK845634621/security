@@ -35,6 +35,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.exceptionHandling().accessDeniedPage("/denied.html");
+
         http.formLogin()
                 //访问的登录页的url
                 .loginPage("/login.html")
@@ -44,9 +47,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/test/index").permitAll()
                 //无需认证页面
                 .and().authorizeRequests().antMatchers("/","/test/hello","/user/login").permitAll()
-                .antMatchers("/test/index").hasAnyAuthority("common,admin")
+//                .antMatchers("/test/index").hasAnyAuthority("common,admin")
                 //hasRole方法自动添加了"ROLE_"前缀
-//                .antMatchers("/test/index").hasRole("saler")
+                .antMatchers("/test/index").hasRole("manager")
                 .anyRequest().authenticated()
                 .and().csrf().disable();
     }
