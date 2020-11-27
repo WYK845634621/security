@@ -1,6 +1,7 @@
 package com.yikai.security.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,9 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2020/11/25 16:25
  */
 @RestController
+@RequestMapping("/test")
 public class HelloController {
     @GetMapping("/hello")
     public String hello(){
         return "hello";
+    }
+
+    @GetMapping("/index")
+    public String index(){
+        return "this is index";
     }
 }

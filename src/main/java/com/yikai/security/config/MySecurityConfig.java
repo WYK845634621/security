@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,5 +31,20 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin()
+                //访问的登录页的url
+                .loginPage("/login.html")
+                //表单url
+                .loginProcessingUrl("/user/login")
+                //登录成功后的
+                .defaultSuccessUrl("/success.html").permitAll()
+                //无需认证页面
+                .and().authorizeRequests().antMatchers("/","/test/hello","/user/login").permitAll()
+                .anyRequest().authenticated()
+                .and().csrf().disable();
     }
 }
